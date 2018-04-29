@@ -21,6 +21,7 @@ module.exports = {
 		new CleanWebpackPlugin(['dist'])
 	],
 	module: {
+		noParse: /(mapbox-gl)\.js$/,
 		rules: [
 			{
 				test: /\.css$/,
