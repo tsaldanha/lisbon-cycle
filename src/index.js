@@ -12,26 +12,5 @@ import Data from './lisbon.json'
 		center: [-9.17,38.74], // starting position [lng, lat]
     	zoom: 12 // starting zoom
 	});	
-
-	map.on('load', function() {
-		map.addLayer({
-        "id": "route",
-        "type": "line",
-        "source": {
-            "type": "geojson",
-            "data": Data
-        },
-        "layout": {
-            "line-join": "round",
-            "line-cap": "round"
-        },
-        "paint": {
-            "line-color": "#888",
-            "line-width": 2
-        }
-    });
-
-	});
 	
-
 })();
