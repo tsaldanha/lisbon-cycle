@@ -1,15 +1,34 @@
-//import mapboxgl from 'mapbox-gl';
+import React from "react";
+import ReactDOM from "react-dom";
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import './style.css';
 
+mapboxgl.accessToken = 'pk.eyJ1IjoidHNhbGRhbmhhIiwiYSI6ImNqZ2p4cDhqZjFrOGkyd3FvaXVzdmN2MHMifQ.e0i8Mrl2Z738v3FPQsH_0w';
 
-(function(){
+class Map extends React.Component {
+	constructor(props: Props) {
+	    super(props);
+	    this.state = {
+	      lng: -9.17,
+	      lat: 38.74,
+	      zoom: 12
+	    };
+  	}
+  	componentDidMount() {
+	    const { lng, lat, zoom } = this.state;
+	    const map = new mapboxgl.Map({
+	      container: 'map',
+		  style: 'mapbox://styles/tsaldanha/cjgl7uxqe000i2sqive3fsfsm',
+	      center: [lng, lat],
+	      zoom
+	    });
+	}
+	render() {
+	    return (
+	        <div id="map" />
+	    );
+  	}
+}
 
-	mapboxgl.accessToken = 'pk.eyJ1IjoidHNhbGRhbmhhIiwiYSI6ImNqZ2p4cDhqZjFrOGkyd3FvaXVzdmN2MHMifQ.e0i8Mrl2Z738v3FPQsH_0w';
-	var map = new mapboxgl.Map({
-		container: 'map',
-		style: 'mapbox://styles/tsaldanha/cjgl7uxqe000i2sqive3fsfsm',
-		center: [-9.17,38.74], // starting position [lng, lat]
-    	zoom: 12 // starting zoom
-	});	
-	
-})();
+ReactDOM.render(<Map />, document.getElementById('app'));
