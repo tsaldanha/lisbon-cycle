@@ -1,6 +1,5 @@
-import mapboxgl from 'mapbox-gl';
+//import mapboxgl from 'mapbox-gl';
 import './style.css';
-import Data from './lisbon.json'
 
 
 (function(){
