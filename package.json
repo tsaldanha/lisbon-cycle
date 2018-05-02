@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "start": "webpack-dev-server --mode development --open",
+    "start": "webpack-dev-server --mode development --open"
   },
   "repository": {
     "type": "git",
@@ -42,6 +42,8 @@
     "xml-loader": "^1.2.1"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-directions": "^3.1.2",
+    "@mapbox/mapbox-gl-geocoder": "^2.2.0",
     "mapbox-gl": "^0.45.0-beta.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2"
