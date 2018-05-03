@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import MapboxDirections from '@mapbox/mapbox-gl-directions';
+//import MapboxDirections from '@mapbox/mapbox-gl-directions';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
+//import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
 
 import './style.css';
 
@@ -35,11 +35,7 @@ class Map extends React.Component {
 	    	accessToken: mapboxgl.accessToken,
 			country: 'pt'
 		}));
-		map.addControl(new MapboxDirections({
-		  accessToken: mapboxgl.accessToken,
-		  unit: 'metric',
-		  profile: 'mapbox/cycling'
-		}), 'top-left');
+		
 
 	}
 	render() {
