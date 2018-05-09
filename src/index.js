@@ -35,8 +35,6 @@ class Map extends React.Component {
 	    	accessToken: mapboxgl.accessToken,
 			country: 'pt'
 		}));
-		
-
 	}
 	render() {
 	    return (
