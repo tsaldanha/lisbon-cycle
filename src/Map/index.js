@@ -27,7 +27,7 @@ export default class extends Component {
 
 	    const map = new mapboxgl.Map({
 	      container: 'map',
-		  style: 'mapbox://styles/tsaldanha/cjgl7uxqe000i2sqive3fsfsm',
+		  style: 'mapbox://styles/tsaldanha/cjgnpy13m00512snzldvoqrtw',
 	      center: [lng, lat],
 	      zoom
 	    });
@@ -46,10 +46,23 @@ export default class extends Component {
 		    trackUserLocation: true
 		});
 
-	    map.addControl(geocoder,'top-left');
 		map.addControl(nav, 'bottom-right');
-		map.addControl(geolocate);
+		map.addControl(geolocate, 'bottom-right');
 
+		document.getElementById('header').appendChild(geocoder.onAdd(map));
+
+		map.on('load', updateGeocoderProximity); // set proximity on map load
+		map.on('moveend', updateGeocoderProximity);
+		function updateGeocoderProximity() {
+		    // proximity is designed for local scale, if the user is looking at the whole world,
+		    // it doesn't make sense to factor in the arbitrary centre of the map
+		    if (map.getZoom() > 9) {
+		        var center = map.getCenter().wrap(); // ensures the longitude falls within -180 to 180 as the Geocoding API doesn't accept values outside this range
+		        geocoder.setProximity({ longitude: center.lng, latitude: center.lat });
+		    } else {
+		        geocoder.setProximity(null);
+		    }
+		}
 		map.on('load', function() {
 		    map.addSource('single-point', {
 		        "type": "geojson",
