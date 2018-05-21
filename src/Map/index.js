@@ -1,8 +1,8 @@
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-//import MapboxDirections from '@mapbox/mapbox-gl-directions';
+//import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.js';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+//import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 //import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
 import mapboxgl from 'mapbox-gl';
 import React, {Component} from "react";
@@ -32,10 +32,7 @@ export default class extends Component {
 	      zoom
 	    });
 	    
-	    const geocoder = new MapboxGeocoder({
-		    accessToken: mapboxgl.accessToken,
-		    contry: 'Portugal',
-		});
+	    
 
 	    const nav = new mapboxgl.NavigationControl();
 
@@ -45,24 +42,19 @@ export default class extends Component {
 		    },
 		    trackUserLocation: true
 		});
+	    const directions = new MapboxDirections({
+		    accessToken: mapboxgl.accessToken,
+		    profile : 'mapbox/cycling',
+		    controls: {
+		    	profileSwitcher: false
+		    }
+		}) 
 
 		map.addControl(nav, 'bottom-right');
 		map.addControl(geolocate, 'bottom-right');
+		document.getElementById('header').appendChild(directions.onAdd(map));
 
-		document.getElementById('header').appendChild(geocoder.onAdd(map));
-
-		map.on('load', updateGeocoderProximity); // set proximity on map load
-		map.on('moveend', updateGeocoderProximity);
-		function updateGeocoderProximity() {
-		    // proximity is designed for local scale, if the user is looking at the whole world,
-		    // it doesn't make sense to factor in the arbitrary centre of the map
-		    if (map.getZoom() > 9) {
-		        var center = map.getCenter().wrap(); // ensures the longitude falls within -180 to 180 as the Geocoding API doesn't accept values outside this range
-		        geocoder.setProximity({ longitude: center.lng, latitude: center.lat });
-		    } else {
-		        geocoder.setProximity(null);
-		    }
-		}
+		
 		map.on('load', function() {
 		    map.addSource('single-point', {
 		        "type": "geojson",
