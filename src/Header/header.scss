@@ -5,4 +5,14 @@
     background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 160%);
 	position: absolute;
 	z-index: 1;
+
+	nav {
+		display: inline-block;
+		ul {
+			display: inline-block;
+			li{
+				display: inline-block;
+			}
+		}
+	}
 }
