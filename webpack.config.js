@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
@@ -8,25 +9,58 @@ module.exports = {
 		filename: 'app.js',
 		path: path.resolve(__dirname, 'dist')
 	},
-  	devtool: 'inline-source-map',
+  	devtool: 'source-map',
 	devServer: {
-		contentBase: './dist'
+		contentBase: './dist',
+		//host: '192.168.1.73'
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
 	   		title: 'Lisbon Cycle',
 	   		template: 'src/index.html'
 		}),
-		new CleanWebpackPlugin(['dist'])
+		new CleanWebpackPlugin(['dist']),
 	],
 	module: {
-		noParse: /(mapbox-gl)\.js$/,
+		//noParse: /(mapbox-gl)\.js$/,
 		rules: [
+			{
+		        test: /\.js$/,
+		        exclude: /node_modules/,
+		        use: {
+		          loader: "babel-loader"
+		        }
+		    },
+		    {
+            test: /\.scss$/,
+	            use: [{
+                	loader: "style-loader"
+	            }, {
+	                loader: "css-loader", options: {
+	                    sourceMap: false
+	                }
+	            }, {
+	                loader: "sass-loader", options: {
+	                    sourceMap: false
+	                }
+	            }]
+	        },
 			{
 				test: /\.css$/,
 				use: [
-			   		'style-loader',
-			   		'css-loader'
+			   		{
+			   			loader: 'style-loader'
+			   		},
+			   		{
+			   			loader: 'css-loader',
+			   			options: {
+			              //modules: true,
+			              //importLoaders: 1,
+			              //localIdentName: "[name]_[local]_[hash:base64]",
+			              //sourceMap: true,
+			              //minimize: true
+			            }
+			   		}
 			 	]
 			},
 			{
