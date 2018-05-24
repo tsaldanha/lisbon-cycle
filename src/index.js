@@ -6,6 +6,7 @@ import Footer from './Footer'
 import './app.scss'
 
 
+
 ReactDOM.render(<Header />, document.getElementById('header'));
 ReactDOM.render(<Map />, document.getElementById('app'));
 ReactDOM.render(<Footer />, document.getElementById('footer'));

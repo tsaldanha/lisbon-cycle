@@ -6,6 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 //import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
 import mapboxgl from 'mapbox-gl';
 import React, {Component} from "react";
+import {Geolocation} from "../Geolocation.js"
 
 import './map.scss';
 
@@ -16,26 +17,48 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidHNhbGRhbmhhIiwiYSI6ImNqZ2p4cDhqZjFrOGkyd3Fva
 export default class extends Component {
 	constructor(props: Props) {
 	    super(props);
+
 	    this.state = {
 	      lng: -9.17,
 	      lat: 38.74,
-	      zoom: 12
+	      zoom: 14
 	    };
+
+	    Geolocation.checkPermission().then(permission => {
+            if (permission.state === 'granted') {
+            	Geolocation.getLocation().then(response =>{
+					this.goToLocation(response.response);
+
+            	});
+            }
+        });
+
+	    this.map;
+
+  	}
+  	goToLocation(coords) {
+  		const LngLat = new mapboxgl.LngLat(coords.longitude, coords.latitude);
+  		//console.log(LngLat);
+  		this.map.easeTo({
+  			center: LngLat
+  		});
+  		const marker = new mapboxgl.Marker();
+  		marker.setLngLat(LngLat);
+  		marker.addTo(this.map);
+  		
   	}
   	componentDidMount() {
 	    const { lng, lat, zoom } = this.state; 
 
-	    const map = new mapboxgl.Map({
+	    this.map = new mapboxgl.Map({
 	      container: 'map',
 		  style: 'mapbox://styles/tsaldanha/cjgnpy13m00512snzldvoqrtw',
 	      center: [lng, lat],
-	      zoom
+	      zoom,
+          pitch: 60
 	    });
 	    
 	    
-
-	    const nav = new mapboxgl.NavigationControl();
-
 	    const geolocate = new mapboxgl.GeolocateControl({
 		    positionOptions: {
 		        enableHighAccuracy: true
@@ -50,35 +73,12 @@ export default class extends Component {
 		    }
 		}) 
 
-		map.addControl(nav, 'bottom-right');
-		map.addControl(geolocate, 'bottom-right');
-		document.getElementById('header').appendChild(directions.onAdd(map));
+		document.getElementById('header').appendChild(directions.onAdd(this.map));
 
 		
-		map.on('load', function() {
-		    map.addSource('single-point', {
-		        "type": "geojson",
-		        "data": {
-		            "type": "FeatureCollection",
-		            "features": []
-		        }
-		    });
-
-		    map.addLayer({
-		        "id": "point",
-		        "source": "single-point",
-		        "type": "circle",
-		        "paint": {
-		            "circle-radius": 10,
-		            "circle-color": "#007cbf"
-		        }
-		    });
-
-		    // Listen for the `geocoder.input` event that is triggered when a user
-		    // makes a selection and add a symbol that matches the result.
-		    geocoder.on('result', function(ev) {
-		        map.getSource('single-point').setData(ev.result.geometry);
-		    });
+		this.map.on('load', function() {
+		  
+		    
 		});
 
 	}
