@@ -38,13 +38,16 @@ export default class extends Component {
   	}
   	goToLocation(coords) {
   		const LngLat = new mapboxgl.LngLat(coords.longitude, coords.latitude);
-  		//console.log(LngLat);
+  		this.state.lng = coords.longitude;
+  		this.state.lat = coords.latitude;
+
   		this.map.easeTo({
   			center: LngLat
   		});
-  		const marker = new mapboxgl.Marker();
+
+  		/*const marker = new mapboxgl.Marker();
   		marker.setLngLat(LngLat);
-  		marker.addTo(this.map);
+  		marker.addTo(this.map);*/
   		
   	}
   	componentDidMount() {
@@ -55,7 +58,8 @@ export default class extends Component {
 		  style: 'mapbox://styles/tsaldanha/cjgnpy13m00512snzldvoqrtw',
 	      center: [lng, lat],
 	      zoom,
-          pitch: 60
+          pitch: 60,
+          unit : 'metric'
 	    });
 	    
 	    
@@ -68,17 +72,18 @@ export default class extends Component {
 	    const directions = new MapboxDirections({
 		    accessToken: mapboxgl.accessToken,
 		    profile : 'mapbox/cycling',
+			unit : 'metric',
+			alternatives: true,
 		    controls: {
-		    	profileSwitcher: false
-		    }
+		    	profileSwitcher: false,
+		    	instructions: false		    }
 		}) 
 
 		document.getElementById('header').appendChild(directions.onAdd(this.map));
 
 		
-		this.map.on('load', function() {
-		  
-		    
+		this.map.on('load', () => {
+			directions.setOrigin([this.state.lng,this.state.lat]);  
 		});
 
 	}
