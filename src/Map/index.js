@@ -1,15 +1,12 @@
-//import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.js';
 
-import 'mapbox-gl/dist/mapbox-gl.css';
-//import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-//import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
-import mapboxgl from 'mapbox-gl';
 import React, {Component} from "react";
 import {Geolocation} from "../Geolocation.js"
 
-import './map.scss';
+import mapboxgl from 'mapbox-gl';
+import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.js';
 
+import './map.scss';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 
 mapboxgl.accessToken = 'pk.eyJ1IjoidHNhbGRhbmhhIiwiYSI6ImNqZ2p4cDhqZjFrOGkyd3FvaXVzdmN2MHMifQ.e0i8Mrl2Z738v3FPQsH_0w';
@@ -37,19 +34,15 @@ export default class extends Component {
 
   	}
   	goToLocation(coords) {
-  		const LngLat = new mapboxgl.LngLat(coords.longitude, coords.latitude);
   		this.state.lng = coords.longitude;
   		this.state.lat = coords.latitude;
 
   		this.map.easeTo({
-  			center: LngLat
+  			center: [this.state.lng, this.state.lat]
   		});
-
-  		/*const marker = new mapboxgl.Marker();
-  		marker.setLngLat(LngLat);
-  		marker.addTo(this.map);*/
-  		
+		this.directions.setOrigin([this.state.lng,this.state.lat]);    		
   	}
+
   	componentDidMount() {
 	    const { lng, lat, zoom } = this.state; 
 
@@ -69,21 +62,23 @@ export default class extends Component {
 		    },
 		    trackUserLocation: true
 		});
-	    const directions = new MapboxDirections({
+	    this.directions = new MapboxDirections({
 		    accessToken: mapboxgl.accessToken,
 		    profile : 'mapbox/cycling',
 			unit : 'metric',
 			alternatives: true,
 		    controls: {
 		    	profileSwitcher: false,
-		    	instructions: false		    }
+		    	instructions: false,
+		    	inputs: false		    
+		    }
 		}) 
 
-		document.getElementById('header').appendChild(directions.onAdd(this.map));
+		document.getElementById('header').appendChild(this.directions.onAdd(this.map));
 
 		
 		this.map.on('load', () => {
-			directions.setOrigin([this.state.lng,this.state.lat]);  
+			this.directions.setOrigin([this.state.lng,this.state.lat]);  
 		});
 
 	}
