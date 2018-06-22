@@ -9,4 +9,5 @@ To install the project
 To run the project
 `$ npm run`
 
-http://localhost:8080
+The `run` comand will open:
+`http://localhost:8080`

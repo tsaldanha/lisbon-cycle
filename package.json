@@ -4,7 +4,7 @@
     "node": "8.6.0"
   },
   "version": "1.0.0",
-  "description": "Project to import and render bike lanes from Lisbon",
+  "description": "Lisbon bicycle lane bike map",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
