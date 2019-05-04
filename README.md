@@ -7,7 +7,7 @@ To install the project
 `$ npm install`
 
 To run the project
-`$ npm run`
+`$ npm start`
 
-The `run` comand will open:
+The `start` comand will open:
 `http://localhost:8080`
