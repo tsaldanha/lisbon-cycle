@@ -3,7 +3,10 @@ import React, {Component} from "react";
 import {Geolocation} from "../Geolocation.js"
 
 import mapboxgl from 'mapbox-gl';
-import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.js';
+import MapboxDirections from '../libs/mapbox-gl-directions-w-language.js';
+import MapboxLanguage from '@mapbox/mapbox-gl-language';
+
+
 
 import './map.scss';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -24,7 +27,7 @@ export default class extends Component {
 	    Geolocation.checkPermission().then(permission => {
             if (permission.state === 'granted') {
             	Geolocation.getLocation().then(response =>{
-					this.goToLocation(response.response);
+					//this.goToLocation(response.response);
 
             	});
             }
@@ -67,15 +70,19 @@ export default class extends Component {
 		    profile : 'mapbox/cycling',
 			unit : 'metric',
 			alternatives: true,
+			language: 'pt',
 		    controls: {
 		    	profileSwitcher: false,
-		    	instructions: false,
+		    	instructions: true,
 		    	inputs: false		    
 		    }
 		}) 
 
-		document.getElementById('header').appendChild(this.directions.onAdd(this.map));
+		document.getElementById('app').appendChild(this.directions.onAdd(this.map));
 
+		this.map.addControl(new MapboxLanguage({
+  			defaultLanguage: 'pt'
+		}));
 		
 		this.map.on('load', () => {
 			this.directions.setOrigin([this.state.lng,this.state.lat]);  
